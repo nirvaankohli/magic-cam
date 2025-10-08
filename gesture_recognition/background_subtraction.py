@@ -6,7 +6,7 @@ import sys
 module_dir = Path(__file__).parent.parent / "hand_recognition"
 sys.path.insert(0, str(module_dir))
 
-import recognitionv2
+import recognitionv2 as hrec
 
 
 def main():
