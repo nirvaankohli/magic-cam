@@ -1,5 +1,6 @@
 import cv2
 import mediapipe.python.solutions.hands as mp_hands
+from hand_recognition import recognitionv2 as hrec
 
 
 def main():
