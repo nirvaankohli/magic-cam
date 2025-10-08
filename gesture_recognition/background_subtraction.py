@@ -1,6 +1,8 @@
 import cv2
 import mediapipe.python.solutions.hands as mp_hands
-from hand_recognition import recognitionv2 as hrec
+from pathlib import Path
+
+module_dir = Path(__file__).parent
 
 
 def main():
