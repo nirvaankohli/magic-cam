@@ -19,6 +19,8 @@ def get_hand_bbox(lm, img_width, img_height):
     y_min = max(int(min(y_coords)) - padding, 0)
     y_max = min(int(max(y_coords)) + padding, img_height)
 
+    return (x_min, y_min, x_max, y_max)
+
 
 import recognitionv2 as hrec
 
@@ -55,6 +57,11 @@ def main():
             if results.multi_hand_landmarks
             else "No hands detected"
         )
+
+
+        if results.multi_hand_landmarks:
+
+            
 
         cv2.imshow("Magic Cam - Only Hand Recognition - press 'q' to quit", frame)
 
