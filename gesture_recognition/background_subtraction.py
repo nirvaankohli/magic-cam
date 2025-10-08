@@ -58,10 +58,19 @@ def main():
             else "No hands detected"
         )
 
-
         if results.multi_hand_landmarks:
 
-            
+            hand_bbox = get_hand_bbox(
+                results.multi_hand_landmarks[0], frame.shape[1], frame.shape[0]
+            )
+
+            frame = cv2.rectangle(
+                frame,
+                (hand_bbox[0], hand_bbox[1]),
+                (hand_bbox[2], hand_bbox[3]),
+                (255, 0, 0),
+                2,
+            )
 
         cv2.imshow("Magic Cam - Only Hand Recognition - press 'q' to quit", frame)
 
