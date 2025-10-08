@@ -15,4 +15,22 @@ def main():
         min_detection_confidence=0.5,
         min_tracking_confidence=0.5) as hands:
 
-        
+        while cap.isOpened():
+
+            success, iframe = cap.read()
+
+            if not success:
+
+                print("Ignoring empty camera frame.")
+
+                continue
+
+            cv2.imshow("Magic Cam - Only Hand Recognition - press 'q' to quit", iframe)
+
+            if cv2.waitKey(1) & 0xFF == ord('q'):
+                
+                break
+
+    cap.release()
+
+    
