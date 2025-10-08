@@ -14,9 +14,14 @@ def main():
 
         cv2.imshow("MediaPipe Hands", frame)
 
-        
+        if cv2.waitKey(1) & 0xFF == ord("q"):
+
+            break
+
+    cap.release()
 
 
 if __name__ == "__main__":
 
     main()
+    
