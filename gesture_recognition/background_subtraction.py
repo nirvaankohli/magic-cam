@@ -12,6 +12,13 @@ def get_hand_bbox(lm, img_width, img_height):
     x_coords = [lm.x * img_width for lm in lm.landmark]
     y_coords = [lm.y * img_height for lm in lm.landmark]
 
+    padding = 10
+
+    x_min = max(int(min(x_coords)) - padding, 0)
+    x_max = min(int(max(x_coords)) + padding, img_width)
+    y_min = max(int(min(y_coords)) - padding, 0)
+    y_max = min(int(max(y_coords)) + padding, img_height)
+
 
 import recognitionv2 as hrec
 
