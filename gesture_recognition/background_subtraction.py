@@ -25,6 +25,8 @@ def main():
 
         frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
+        frame, results = hrec.process_frame(frame, hands)
+
         cv2.imshow("Magic Cam - Only Hand Recognition - press 'q' to quit", frame)
 
         if cv2.waitKey(1) & 0xFF == ord("q"):
