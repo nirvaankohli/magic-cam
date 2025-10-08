@@ -28,13 +28,7 @@ def main():
             frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
             results = hands.process(frame_rgb)
 
-            if results.multi_hand_landmarks is None:
-
-                print("No hands detected")
-
-            else:
-                
-                print(f"Number of hands detected: {len(results.multi_hand_landmarks)}")
+            
 
             cv2.imshow("Magic Cam - Only Hand Recognition - press 'q' to quit", frame)
 
