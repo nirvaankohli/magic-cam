@@ -3,9 +3,10 @@ import mediapipe.python.solutions.hands as mp_hands
 from pathlib import Path
 import sys
 
-
 module_dir = Path(__file__).parent.parent / "hand_recognition"
 sys.path.insert(0, str(module_dir))
+
+import recognitionv2
 
 
 def main():
