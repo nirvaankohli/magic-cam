@@ -17,7 +17,7 @@ def main():
 
         while cap.isOpened():
 
-            success, iframe = cap.read()
+            success, frame = cap.read()
 
             if not success:
 
@@ -25,7 +25,18 @@ def main():
 
                 continue
 
-            cv2.imshow("Magic Cam - Only Hand Recognition - press 'q' to quit", iframe)
+            frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            results = hands.process(frame_rgb)
+
+            if results.multi_hand_landmarks is None:
+
+                print("No hands detected")
+
+            else:
+                
+                print(f"Number of hands detected: {len(results.multi_hand_landmarks)}")
+
+            cv2.imshow("Magic Cam - Only Hand Recognition - press 'q' to quit", frame)
 
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 
@@ -33,4 +44,7 @@ def main():
 
     cap.release()
 
-    
+if __name__ == "__main__":
+
+    main()
+
