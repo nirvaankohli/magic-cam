@@ -9,6 +9,7 @@ sys.path.insert(0, str(module_dir))
 
 def get_hand_bbox(landmarks, img_width, img_height):
 
+    
 
 
 import recognitionv2 as hrec
@@ -39,6 +40,17 @@ def main():
 
         fr, results = hrec.process_frame(frame, hands)
 
+        print(
+
+            get_hand_bbox(
+                
+                results.multi_hand_landmarks[0], frame.shape[1], frame.shape[0]
+           
+            )
+            
+            if results.multi_hand_landmarks
+            else "No hands detected"
+        )
 
         cv2.imshow("Magic Cam - Only Hand Recognition - press 'q' to quit", frame)
 
