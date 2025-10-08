@@ -1,0 +1,17 @@
+# Magic Cam - Gesture Recognition Requirements
+# Install with: pip install -r requirements.txt
+
+# Core computer vision and machine learning
+opencv-python>=4.8.0
+mediapipe>=0.10.0
+numpy>=1.21.0
+
+# Optional: For advanced features and performance
+# scikit-learn>=1.0.0  # For machine learning enhancements
+# tensorflow>=2.8.0    # If you want to train custom models
+# matplotlib>=3.5.0    # For data visualization and analysis
+
+# Development and testing (optional)
+# pytest>=6.0.0
+# black>=22.0.0
+# flake8>=4.0.0
