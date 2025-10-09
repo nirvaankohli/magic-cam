@@ -1,14 +1,26 @@
 import cv2
 import mediapipe as mp
+import numpy as np
+
+
+# if not for import use
+def setup_drawing_utils():
+
+    return mp.solutions.drawing_utils, mp.solutions.drawing_styles
+
 
 # Init MediaPipe Face Mesh
 mp_face_mesh = mp.solutions.face_mesh
-face_mesh = mp_face_mesh.FaceMesh()
+face_mesh = mp_face_mesh.FaceMesh(
+    static_image_mode=False,
+    max_num_faces=1,
+    refine_landmarks=True,
+    min_detection_confidence=0.5,
+    min_tracking_confidence=0.5,
+)
 
-# Init Drawing Utils
 
-
-def main():
+def main(mp_drawing, mp_drawing_styles):
 
     cap = cv2.VideoCapture(0)
 
@@ -30,4 +42,6 @@ def main():
 
 if __name__ == "__main__":
 
-    main()
+    mp_drawing, mp_drawing_styles = setup_drawing_utils()
+
+    main(mp_drawing, mp_drawing_styles)
