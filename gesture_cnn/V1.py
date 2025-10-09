@@ -113,7 +113,7 @@ def get_data_loaders(data_dir, batch_size, num_workers, device):
         pin_memory=pin,
         persistent_workers=persistent,
     )
-    
+
     val_loader = DataLoader(
         val_ds,
         batch_size=batch_size,
@@ -275,7 +275,8 @@ def load_checkpoint(path, model, optimizer=None, scheduler=None, scaler=None):
 
 
 def main():
-    parser = argparse.ArgumentParser("Fashion-MNIST v3+")
+
+    parser = argparse.ArgumentParser("Gesture CNN Training")
     parser.add_argument("--data-dir", type=str, default="./data")
     parser.add_argument("--output-dir", type=str, default="./outputs")
     parser.add_argument("--batch-size", type=int, default=128)
@@ -327,7 +328,7 @@ def main():
     early_stop = EarlyStopping(patience=args.patience)
     writer = SummaryWriter(log_dir=args.output_dir)
     csv_logger = CSVLogger(
-        Path(args.output_dir) / "V3_metrics.csv",
+        Path(args.output_dir) / "V1_metrics.csv",
         [
             "epoch",
             "train_loss",
@@ -377,10 +378,10 @@ def main():
                     "scaler": scaler.state_dict(),
                     "best_acc": best_acc,
                 },
-                Path(args.output_dir) / "best_V3_model.pth",
+                Path(args.output_dir) / "best_V1_model.pth",
             )
             print(
-                f"Epoch {epoch:02d}: 🎉 New best val_acc = {best_acc*100:.2f}%, saved best_V3_model.pth"
+                f"Epoch {epoch:02d}: 🎉 New best val_acc = {best_acc*100:.2f}%, saved best_V1_model.pth"
             )
 
         if epoch > args.swa_start:
@@ -404,7 +405,7 @@ def main():
 
     update_bn(train_loader, swa_model)
     torch.save(
-        swa_model.module.state_dict(), Path(args.output_dir) / "V3_swa_model.pth"
+        swa_model.module.state_dict(), Path(args.output_dir) / "V1_swa_model.pth"
     )
 
     csv_logger.close()
