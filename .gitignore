@@ -7,7 +7,7 @@ data/
 gesture_cnn/data/
 # C extensions
 *.so
-
+outputs/
 # Distribution / packaging
 .Python
 build/

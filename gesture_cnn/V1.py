@@ -113,6 +113,7 @@ def get_data_loaders(data_dir, batch_size, num_workers, device):
         pin_memory=pin,
         persistent_workers=persistent,
     )
+    
     val_loader = DataLoader(
         val_ds,
         batch_size=batch_size,
