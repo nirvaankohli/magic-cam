@@ -385,6 +385,7 @@ def main():
             )
 
         if epoch > args.swa_start:
+
             swa_model.update_parameters(model)
             swa_scheduler.step()
 
