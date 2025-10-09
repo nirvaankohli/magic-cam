@@ -1,4 +1,11 @@
 import cv2
+import mediapipe as mp
+
+# Init MediaPipe Face Mesh
+mp_face_mesh = mp.solutions.face_mesh
+face_mesh = mp_face_mesh.FaceMesh()
+
+# Init Drawing Utils
 
 
 def main():
@@ -14,6 +21,7 @@ def main():
         cv2.imshow("The frame", frame)
 
         if cv2.waitKey(1) & 0xFF == ord("q"):
+
             break
 
     cap.release()
