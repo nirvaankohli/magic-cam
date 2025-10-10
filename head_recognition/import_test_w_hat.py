@@ -40,13 +40,14 @@ def draw_hat(image_rgb, results):
 
         angle = (angle // 2) * 2
 
-        hat_img = cv2.imread("hat.png", cv2.IMREAD_UNCHANGED)
+        hat_img_path = Path(__file__).parent / "hat.png"
+        hat_img = cv2.imread(str(hat_img_path), cv2.IMREAD_UNCHANGED)
 
         if hat_img is not None:
 
             print(angle)
 
-            hat_size = 4
+            hat_size = 5
 
             hat_width = hat_size * int(np.linalg.norm(right_pt - left_pt))
             hat_height = int(0.9 * hat_width)
@@ -54,7 +55,7 @@ def draw_hat(image_rgb, results):
                 hat_img, (hat_width, hat_height), interpolation=cv2.INTER_AREA
             )
 
-            anchor_point = (hat_width // 2, hat_height - (hat_height // 7))
+            anchor_point = (hat_width // 2, hat_height - (hat_height // 5.5))
 
             M = cv2.getRotationMatrix2D(anchor_point, angle, 1)
             rotated_hat = cv2.warpAffine(
@@ -123,6 +124,9 @@ def draw_hat(image_rgb, results):
             image_rgb = cv2.cvtColor(image_rgba, cv2.COLOR_RGBA2RGB)
 
             return image_rgb
+
+    # Return original image if no face landmarks or hat loading failed
+    return image_rgb
 
 
 def main():

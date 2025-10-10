@@ -28,10 +28,8 @@ class HeadRecognition:
         if results.multi_face_landmarks:
             return_arr["results"] = results
             return_arr["bbox"] = get_bbox(results, image_rgb)
-            
+
         return return_arr
-
-
 
 
 # if not for import use
@@ -59,6 +57,7 @@ def get_bbox(results, image_rgb):
 
 # draw the face thingies on the image
 def draw_image(image_rgb, results):
+    mp_drawing, mp_drawing_styles = setup_drawing_utils()
 
     for face_landmarks in results.multi_face_landmarks:
 
@@ -85,6 +84,8 @@ def draw_image(image_rgb, results):
             landmark_drawing_spec=None,
             connection_drawing_spec=mp_drawing_styles.get_default_face_mesh_iris_connections_style(),
         )
+
+        return image_rgb
 
 
 def draw_bbox(image_rgb, bbox):
