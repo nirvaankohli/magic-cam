@@ -254,7 +254,6 @@ def create_hand_mask(cropped_image, hand_landmarks, bbox, img_width, img_height)
 
     mask = apply_after_mask_effects(mask)
 
-
     return mask
 
 
