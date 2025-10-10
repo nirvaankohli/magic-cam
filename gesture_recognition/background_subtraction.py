@@ -155,9 +155,9 @@ def create_hand_mask(cropped_image, hand_landmarks, bbox, img_width, img_height)
     crop_height = y_max - y_min
     crop_size = min(crop_width, crop_height)
 
-    proportion = crop_size / 200
+    proportion = crop_size / 100
 
-    line_thickness = round(8 * proportion)
+    line_thickness = round(10 * (proportion * .5))
     joint_radius = line_thickness // 2
 
     connections = [
@@ -232,10 +232,19 @@ def create_hand_mask(cropped_image, hand_landmarks, bbox, img_width, img_height)
 
                 thickness = finger_thickness + (5 * proportion)
 
+            line1 = tuple(finger_points[i])
+            line2 = tuple(finger_points[i + 1])
+
+            if i > len(finger_points) - 2:
+
+                line1 = tuple(finger_points[i])
+
+                line1[1] = line1[1] + 40
+
             cv2.line(
                 mask,
-                tuple(finger_points[i]),
-                tuple(finger_points[i + 1]),
+                line1,
+                line2,
                 255,
                 int(thickness),
             )
