@@ -77,32 +77,37 @@ def get_data_loaders(data_dir, batch_size, num_workers, device):
 
     train_tf = transforms.Compose(
         [
+            transforms.Resize((64, 64)),  # Slightly larger than original 50x50
             transforms.Grayscale(3),
-            transforms.Pad(4),
-            transforms.RandomCrop(28),
             transforms.RandomHorizontalFlip(),
+            transforms.RandomRotation(10),  # Add rotation for gesture data
             transforms.RandAugment(num_ops=2, magnitude=9),
             transforms.ToTensor(),
             transforms.Normalize(mean, std),
             transforms.RandomErasing(
-                p=0.5, scale=(0.02, 0.1), ratio=(0.3, 3.3), value="random"
+                p=0.3,
+                scale=(0.02, 0.1),
+                ratio=(0.3, 3.3),
+                value="random",  # Reduced probability
             ),
         ]
     )
 
     test_tf = transforms.Compose(
         [
+            transforms.Resize((64, 64)),  # Match training size
             transforms.Grayscale(3),
             transforms.ToTensor(),
             transforms.Normalize(mean, std),
         ]
     )
 
-    train_ds = datasets.FashionMNIST(
-        data_dir, train=True, download=True, transform=train_tf
+    # Use ImageFolder for your custom gesture dataset
+    train_ds = datasets.ImageFolder(
+        root=os.path.join(data_dir, "train", "train"), transform=train_tf
     )
-    val_ds = datasets.FashionMNIST(
-        data_dir, train=False, download=True, transform=test_tf
+    val_ds = datasets.ImageFolder(
+        root=os.path.join(data_dir, "test", "test"), transform=test_tf
     )
 
     train_loader = DataLoader(
@@ -125,8 +130,10 @@ def get_data_loaders(data_dir, batch_size, num_workers, device):
     return train_loader, val_loader
 
 
-def make_model(num_classes=10, dropout_p=0.3):
-    model = models.efficientnet_b0(pretrained=True)
+def make_model(num_classes=20, dropout_p=0.3):  # Changed from 10 to 20 classes
+    model = models.efficientnet_b0(
+        weights="IMAGENET1K_V1"
+    )  # Updated to use weights parameter
     in_feat = model.classifier[1].in_features
     model.classifier = nn.Sequential(
         nn.Dropout(p=dropout_p),
@@ -183,7 +190,9 @@ def train_one_epoch(
 ):
     model.train()
     loss_accum, correct, total = 0.0, 0.0, 0
-    top3 = torchmetrics.Accuracy(task="multiclass", num_classes=10, top_k=3).to(device)
+    top3 = torchmetrics.Accuracy(task="multiclass", num_classes=20, top_k=3).to(
+        device
+    )  # Changed from 10 to 20
     pbar = tqdm(loader, desc=f"Train [{epoch}/{total_epochs}]", ncols=120)
 
     for imgs, labels in pbar:
@@ -232,7 +241,9 @@ def train_one_epoch(
 def validate(model, loader, criterion, device, epoch, total_epochs):
     model.eval()
     loss_accum, correct, total = 0.0, 0, 0
-    top3 = torchmetrics.Accuracy(task="multiclass", num_classes=10, top_k=3).to(device)
+    top3 = torchmetrics.Accuracy(task="multiclass", num_classes=20, top_k=3).to(
+        device
+    )  
     pbar = tqdm(loader, desc=f"Valid [{epoch}/{total_epochs}]", ncols=120)
 
     for imgs, labels in pbar:
