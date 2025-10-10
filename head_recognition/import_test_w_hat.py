@@ -46,15 +46,15 @@ def draw_hat(image_rgb, results):
 
             print(angle)
 
-            hat_size = 5
+            hat_size = 4
 
             hat_width = hat_size * int(np.linalg.norm(right_pt - left_pt))
-            hat_height = int(1 * hat_width)
+            hat_height = int(0.9 * hat_width)
             resized_hat = cv2.resize(
                 hat_img, (hat_width, hat_height), interpolation=cv2.INTER_AREA
             )
 
-            anchor_point = (hat_width // 2, hat_height - 40)
+            anchor_point = (hat_width // 2, hat_height - (hat_height // 7))
 
             M = cv2.getRotationMatrix2D(anchor_point, angle, 1)
             rotated_hat = cv2.warpAffine(
@@ -66,8 +66,13 @@ def draw_hat(image_rgb, results):
                 borderValue=(0, 0, 0, 0),
             )
 
-            hat_x = int(top_pt[0] - anchor_point[0])
-            hat_y = int(top_pt[1] - anchor_point[1])
+            anchor_arr = np.array([[anchor_point]], dtype=np.float32)
+            rotated_anchor = cv2.transform(anchor_arr, M)[0][0]
+
+            offset = np.array(top_pt) - rotated_anchor.astype(int)
+
+            hat_x = int(offset[0])
+            hat_y = int(offset[1])
 
             if image_rgb.shape[2] == 3:
                 image_rgba = cv2.cvtColor(image_rgb, cv2.COLOR_RGB2RGBA)
