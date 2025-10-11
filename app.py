@@ -20,6 +20,8 @@ class VideoProcessor(VideoProcessorBase):
         self.effects = []
         self.bts = []
         self.display_texts = []
+        # Initialize head recognizer once to avoid recreation overhead
+        self.head_recognizer = head_recognition.HeadRecognition()
 
     def update_settings(self, effects, bts, display_texts):
 
@@ -38,9 +40,6 @@ class VideoProcessor(VideoProcessorBase):
         img = cv2.flip(img, 1)
 
         head_landmarks = False
-
-        # Increment frame counter for animations
-        self.frame_count += 1
 
         if "Spells" in effects:
 
@@ -63,8 +62,35 @@ class VideoProcessor(VideoProcessorBase):
                         2,
                         cv2.LINE_AA,
                     )
-            print(hand_recognition_result.gestures[0][0])
-            
+
+            top_gesture = None
+            gesture_name = None
+            confidence = None
+
+            if hand_recognition_result.gestures:
+
+                top_gesture = hand_recognition_result.gestures[0][0]
+                gesture_name = top_gesture.category_name
+                confidence = top_gesture.score
+
+                if gesture_name == "Pointing_Up" and confidence > 0.6:
+                    cv2.putText(
+                        img,
+                        "Casting Spell: Fireball!",
+                        (10, img.shape[0] - 30),
+                        cv2.FONT_HERSHEY_SIMPLEX,
+                        1,
+                        (0, 0, 255),
+                        2,
+                        cv2.LINE_AA,
+                    )
+
+                    # Draw a simple fireball effect (a red circle)
+                    center_x = img.shape[1] // 2
+                    center_y = img.shape[0] // 2
+                    cv2.circle(img, (center_x, center_y), 30, (0, 0, 255), -1)
+
+
 
         if "Wizard Hat" in effects:
             try:
