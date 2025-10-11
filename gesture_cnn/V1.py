@@ -44,7 +44,7 @@ class CSVLogger:
 
 class EarlyStopping:
 
-    def __init__(self, patience=5, min_delta=1e-4):
+    def __init__(self, patience=10, min_delta=1e-4):
 
         self.patience = patience
         self.min_delta = min_delta
@@ -241,9 +241,7 @@ def train_one_epoch(
 def validate(model, loader, criterion, device, epoch, total_epochs):
     model.eval()
     loss_accum, correct, total = 0.0, 0, 0
-    top3 = torchmetrics.Accuracy(task="multiclass", num_classes=20, top_k=3).to(
-        device
-    )  
+    top3 = torchmetrics.Accuracy(task="multiclass", num_classes=20, top_k=3).to(device)
     pbar = tqdm(loader, desc=f"Valid [{epoch}/{total_epochs}]", ncols=120)
 
     for imgs, labels in pbar:
@@ -378,8 +376,8 @@ def main():
             model, val_loader, criterion, device, epoch, args.epochs
         )
 
-        if val_acc > best_acc:
-            best_acc = val_acc
+        if val_acc + tr_acc > best_acc:
+            best_acc = val_acc + tr_acc
             save_checkpoint(
                 {
                     "epoch": epoch,
@@ -392,7 +390,7 @@ def main():
                 Path(args.output_dir) / "best_V1_model.pth",
             )
             print(
-                f"Epoch {epoch:02d}: 🎉 New best val_acc = {best_acc*100:.2f}%, saved best_V1_model.pth"
+                f"Epoch {epoch:02d}: 🎉 New best val_acc + tr_acc = {best_acc*100:.2f}%, saved best_V1_model.pth"
             )
 
         if epoch > args.swa_start:
