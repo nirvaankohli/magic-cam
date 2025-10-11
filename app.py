@@ -5,6 +5,8 @@ import av
 import numpy as np
 from head_recognition import head_recognition
 from head_recognition.import_test_w_hat import draw_hat
+from pretrained_gesture_recognition import recognition
+from hand_recognition import recognitionv2 as rec
 
 
 class VideoProcessor(VideoProcessorBase):
@@ -18,8 +20,6 @@ class VideoProcessor(VideoProcessorBase):
         self.effects = []
         self.bts = []
         self.display_texts = []
-        # Initialize head recognizer once to avoid recreation overhead
-        self.head_recognizer = head_recognition.HeadRecognition()
 
     def update_settings(self, effects, bts, display_texts):
 
@@ -38,6 +38,33 @@ class VideoProcessor(VideoProcessorBase):
         img = cv2.flip(img, 1)
 
         head_landmarks = False
+
+        # Increment frame counter for animations
+        self.frame_count += 1
+
+        if "Spells" in effects:
+
+            hand_recognition_result = recognition.recognize_gesture(img)
+
+            if "Model Output(hand)" in display_texts:
+
+                if hand_recognition_result.gestures:
+
+                    img = recognition.draw_results(hand_recognition_result, img)
+
+                else:
+                    cv2.putText(
+                        img,
+                        "No hand detected",
+                        (10, 30),
+                        cv2.FONT_HERSHEY_SIMPLEX,
+                        1,
+                        (0, 0, 255),
+                        2,
+                        cv2.LINE_AA,
+                    )
+            print(hand_recognition_result.gestures[0][0])
+            
 
         if "Wizard Hat" in effects:
             try:
