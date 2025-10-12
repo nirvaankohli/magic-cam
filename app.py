@@ -138,7 +138,7 @@ def process_image(img, effects, bts, display_texts):
                     if image_rgb_with_hat is not None:
                         image_rgb = image_rgb_with_hat
 
-                if "Head Landmarks" in bts:
+                if "Head Landmarks" in bts and head_outputs["results"] is not None:
                     head_recognition.draw_image(image_rgb, head_outputs["results"])
                     head_landmarks = True
 
@@ -218,13 +218,13 @@ if picture is not None:
 
     with col1:
         st.subheader("Original")
-        st.image(img, use_container_width=True)
+        st.image(img, width="stretch")
 
     with col2:
         st.subheader("With Effects")
         with st.spinner("Processing image..."):
             processed_img = process_image(img, effects, bts, display_texts)
-            st.image(processed_img, use_container_width=True)
+            st.image(processed_img, width="stretch")
 
     if processed_img:
 

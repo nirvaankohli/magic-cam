@@ -44,13 +44,14 @@ def get_bbox(results, image_rgb):
     x_min, y_min = w, h
     x_max, y_max = 0, 0
 
-    for face_landmarks in results.multi_face_landmarks:
-        for lm in face_landmarks.landmark:
-            x, y = int(lm.x * w), int(lm.y * h)
-            x_min = min(x_min, x)
-            y_min = min(y_min, y)
-            x_max = max(x_max, x)
-            y_max = max(y_max, y)
+    if results.multi_face_landmarks:
+        for face_landmarks in results.multi_face_landmarks:
+            for lm in face_landmarks.landmark:
+                x, y = int(lm.x * w), int(lm.y * h)
+                x_min = min(x_min, x)
+                y_min = min(y_min, y)
+                x_max = max(x_max, x)
+                y_max = max(y_max, y)
 
     return (x_min, y_min, x_max, y_max)
 
@@ -59,31 +60,32 @@ def get_bbox(results, image_rgb):
 def draw_image(image_rgb, results):
     mp_drawing, mp_drawing_styles = setup_drawing_utils()
 
-    for face_landmarks in results.multi_face_landmarks:
+    if results.multi_face_landmarks:
+        for face_landmarks in results.multi_face_landmarks:
 
-        mp_drawing.draw_landmarks(
-            image=image_rgb,
-            landmark_list=face_landmarks,
-            connections=mp_face_mesh.FACEMESH_TESSELATION,
-            landmark_drawing_spec=None,
-            connection_drawing_spec=mp_drawing_styles.get_default_face_mesh_tesselation_style(),
-        )
+            mp_drawing.draw_landmarks(
+                image=image_rgb,
+                landmark_list=face_landmarks,
+                connections=mp_face_mesh.FACEMESH_TESSELATION,
+                landmark_drawing_spec=None,
+                connection_drawing_spec=mp_drawing_styles.get_default_face_mesh_tesselation_style(),
+            )
 
-        mp_drawing.draw_landmarks(
-            image=image_rgb,
-            landmark_list=face_landmarks,
-            connections=mp_face_mesh.FACEMESH_CONTOURS,
-            landmark_drawing_spec=None,
-            connection_drawing_spec=mp_drawing_styles.get_default_face_mesh_contours_style(),
-        )
+            mp_drawing.draw_landmarks(
+                image=image_rgb,
+                landmark_list=face_landmarks,
+                connections=mp_face_mesh.FACEMESH_CONTOURS,
+                landmark_drawing_spec=None,
+                connection_drawing_spec=mp_drawing_styles.get_default_face_mesh_contours_style(),
+            )
 
-        mp_drawing.draw_landmarks(
-            image=image_rgb,
-            landmark_list=face_landmarks,
-            connections=mp_face_mesh.FACEMESH_IRISES,
-            landmark_drawing_spec=None,
-            connection_drawing_spec=mp_drawing_styles.get_default_face_mesh_iris_connections_style(),
-        )
+            mp_drawing.draw_landmarks(
+                image=image_rgb,
+                landmark_list=face_landmarks,
+                connections=mp_face_mesh.FACEMESH_IRISES,
+                landmark_drawing_spec=None,
+                connection_drawing_spec=mp_drawing_styles.get_default_face_mesh_iris_connections_style(),
+            )
 
         return image_rgb
 
