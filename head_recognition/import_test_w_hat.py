@@ -130,7 +130,7 @@ def draw_hat(image_rgb, results):
 
 
 def main():
-
+    
     cap = cv2.VideoCapture(0)
 
     while True:

@@ -5,13 +5,37 @@ import mediapipe.python.solutions.drawing_utils as mp_drawing
 import mediapipe.python.solutions.drawing_styles as mp_drawing_styles
 
 
-def process_frame(frame, hands):
+def get_hand_bbox(landmarks, frame):
+
+    h, w, _ = frame.shape
+    x_min, y_min = w, h
+    x_max, y_max = 0, 0
+
+    for lm in landmarks.landmark:
+        x, y = int(lm.x * w), int(lm.y * h)
+        x_min = min(x_min, x)
+        y_min = min(y_min, y)
+        x_max = max(x_max, x)
+        y_max = max(y_max, y)
+
+    return (x_min, y_min, x_max, y_max)
+
+
+def process_frame(frame, hands=None, draw_results = False):
+
+    if hands is None:
+
+        hands = mp_hands.Hands(
+            model_complexity=0,
+            max_num_hands=2,
+            min_detection_confidence=0.5,
+            min_tracking_confidence=0.5,
+        )
 
     frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
     results = hands.process(frame_rgb)
-
-    if results.multi_hand_landmarks:
-
+    if draw_results and results.multi_hand_landmarks:
+        
         for landmarks in results.multi_hand_landmarks:
 
             mp_drawing.draw_landmarks(
