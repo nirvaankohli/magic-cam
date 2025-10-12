@@ -150,7 +150,7 @@ class VideoProcessor(VideoProcessorBase):
                         print(f"Hand bounding box: {bbox}")
 
                         self.current_effect_stage["bottom_center"] = (
-                            (bbox[0] + bbox[2]) // 2
+                            (bbox[0] + bbox[2]) // 2,
                             bbox[1],
                         )
 
