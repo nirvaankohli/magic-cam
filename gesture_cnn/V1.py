@@ -9,7 +9,7 @@ import torch.nn as nn
 import torch.optim as optim
 from torch.optim.lr_scheduler import OneCycleLR
 from torch.optim.swa_utils import AveragedModel, SWALR, update_bn
-from torch.cuda.amp import autocast, GradScaler
+from torch.amp import autocast, GradScaler
 from torch.utils.data import DataLoader
 from torch.utils.tensorboard import SummaryWriter
 from torchvision import datasets, transforms, models
@@ -72,7 +72,7 @@ def get_data_loaders(data_dir, batch_size, num_workers, device):
 
     mean = [0.485, 0.456, 0.406]
     std = [0.229, 0.224, 0.225]
-    pin = device.type == "cuda"
+    pin = False
     persistent = num_workers > 0
 
     train_tf = transforms.Compose(
@@ -204,7 +204,7 @@ def train_one_epoch(
         else:
             imgs, y1, y2, lam = mixup_data(imgs, labels, mixup_alpha)
 
-        with autocast():
+        with autocast("cpu"):
             outputs = model(imgs)
             loss = lam * criterion(outputs, y1) + (1 - lam) * criterion(outputs, y2)
 
@@ -246,7 +246,7 @@ def validate(model, loader, criterion, device, epoch, total_epochs):
 
     for imgs, labels in pbar:
         imgs, labels = imgs.to(device), labels.to(device)
-        with autocast():
+        with autocast("cpu"):
             outputs = model(imgs)
             loss = criterion(outputs, labels)
 
@@ -310,10 +310,8 @@ def main():
     random.seed(args.seed)
     np.random.seed(args.seed)
     torch.manual_seed(args.seed)
-    torch.cuda.manual_seed_all(args.seed)
-    torch.backends.cudnn.benchmark = True
 
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    device = torch.device("cpu")
     os.makedirs(args.output_dir, exist_ok=True)
 
     train_loader, val_loader = get_data_loaders(

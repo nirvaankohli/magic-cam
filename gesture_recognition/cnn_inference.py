@@ -83,7 +83,7 @@ def load_model_if_needed(ckpt_path: str):
             if not os.path.exists(ckpt_path):
                 raise FileNotFoundError(f"Model checkpoint not found at: {ckpt_path}")
 
-            _device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+            _device = torch.device("cpu")
             print(f"Using device: {_device}")
 
             _transform = get_transform()
@@ -153,7 +153,6 @@ def infer(input_img, ckpt_path: str, topk: int = 5) -> List[Tuple[str, float]]:
 
         load_model_if_needed(ckpt_path)
 
-
         if _model is None:
             raise RuntimeError("Model is None after loading")
         if _transform is None:
@@ -162,7 +161,6 @@ def infer(input_img, ckpt_path: str, topk: int = 5) -> List[Tuple[str, float]]:
             raise RuntimeError("Class names are None after loading")
         if _device is None:
             raise RuntimeError("Device is None after loading")
-
 
         image = preprocess_input(input_img)
 
