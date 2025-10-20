@@ -1,86 +1,75 @@
-# Magic Cam ✨
+# Magic Cam
+![alt text](<Screenshot 2025-10-13 154331.png>)
+Real-time computer vision application that implements gesture recognition and facial feature detection for visual effects. It's also for siege!
 
-Turn your webcam into a magical experience! This thingy lets you cast spells & wear wizard hats using just hand gestures and computer vision.
+## Overview
 
-## What's This About?
+Computer vision application that uses deep learning and real-time image processing to detect hand gestures and facial landmarks. It also implements real-time overlay effects triggered by specific hand poses and facial detection.
 
-Magic Cam is a real-time computer vision app that detects your hand gestures and facial features to add magical effects to your camera feed. You can point up with your finger to cast a fireball, and automatically get a wizard hat on your head.
+## Core Features
 
-## Features 
+- Gesture-based effect triggering using CNN classification
+- Automated facial landmark detection for effect positioning
+- Custom-trained gesture recognition model (20 classes)
+- Web-based interface with configurable parameters
 
-- **Spell Casting**: Point up with your finger to cast a fireball spell 
-- **Auto Wizard Hat**: Automatically detects your face and adds a wizard hat 
-- **Real-time Processing**: All effects happen live through your webcam
-- **Custom CNN Model**: Trained a gesture recognition model on 20 different hand gestures
-- **Streamlit Interface**: Easy-to-use web interface with effect toggles
+## Technical Architecture
 
-## Tech Stack 🛠️
+- Frontend: Streamlit web application
+- Computer Vision: OpenCV, MediaPipe
+- Deep Learning: PyTorch, EfficientNet-B0 backbone
+- Hand Detection: MediaPipe Hands with custom background subtraction
+- Face Detection: MediaPipe Face Mesh
+- Image Processing: PIL, NumPy arrays
 
-- **Frontend**: Streamlit (for the web interface)
-- **Computer Vision**: OpenCV, MediaPipe
-- **Machine Learning**: PyTorch, custom CNN (EfficientNet-B0 backbone)
-- **Hand Detection**: MediaPipe Hands + custom background subtraction
-- **Face Detection**: MediaPipe Face Mesh
-- **Image Processing**: PIL, NumPy
+## Installation
 
-## How It Works 
-
-1. **Hand Gesture Recognition**: Uses MediaPipe to detect hand landmarks, then feeds processed hand regions to a custom CNN trained on 20 gesture classes
-2. **Face Detection**: MediaPipe Face Mesh detects facial landmarks for hat placement
-3. **Effect Rendering**: OpenCV overlays magical effects (fireballs, wizard hats) on the video feed
-4. **Real-time Processing**: Everything happens live
-
-## Setup & Installation 
-
-1. **Clone the repo**:
+1. Clone repo:
    ```
    git clone https://github.com/nirvaankohli/magic-cam.git
    cd magic-cam
    ```
 
-2. **Install dependencies**:
+2. Install dependencies:
    ```
    pip install -r requirements.txt
    ```
 
-3. **Run the app**:
-   ```
+3. Execute application:
+   ```=
    streamlit run app.py
    ```
 
-4. **Open your browser** and navigate to the Streamlit URL (usually `http://localhost:8501`)
+4. Go to `http://localhost:8501`
 
-## Usage 📸
+## Usage
 
-1. **Allow camera access** when prompted
-2. **Enable effects** using the sidebar:
-   - Toggle "Wizard Hat" for automatic hat detection
-   - Toggle "Spells" for gesture-based fireball casting
-3. **Cast spells** by pointing your finger up
-4. **Behind the scenes** options let you see hand/face landmarks
-5. **Download** your magical photos using the download button
+1. Grant camera access permissions
+2. Configure effect parameters:
+   - Enable facial mesh detection for hat overlay
+   - Enable gesture recognition for effect triggering
+3. Execute the fireball command by pointing up
+4. Export processed frames if u want
 
-## Model Training 
+## Model Architecture
 
-The gesture recognition CNN was trained on a custom dataset with:
-- **20 gesture classes** (numbers 0-9, hand signs, gestures)
-- **EfficientNet-B0** backbone with custom classifier
-- **Data augmentation**: mixup, cutmix, random erasing
-- **Training techniques**: SWA (Stochastic Weight Averaging), early stopping
-- **Achieved**: High accuracy on validation set
+Gesture Recognition CNN:
+- Input: 64x64x3 preprocessed hand region
+- Backbone: EfficientNet-B0 (ImageNet pretrained)
+- Output: 20-class softmax classification
+- Training:
+  - Data augmentation: mixup, cutmix, random erasing
+  - Optimization: SWA, early stopping
+  - Cross-entropy loss with label smoothing
 
-## Future Ideas 
+## Development Roadmap
 
-- More spell types (shield, ice beam, summon orb)
-- Dark vs Light magic system with hat color changes
-- Wand tracking for more precise spell casting
-- Multiplayer spell battles
-- Voice commands integration
+- Additional gesture-effect mappings
+- State-based effect system implementation
+- Wand tracking via object detection
+- Multi-user interaction capabilities
+- Voice command integration
 
-## Contributing 🤝
+## Contributing
 
-Feel free to open issues or submit PRs! This project is all about having fun with computer vision and magic.
-
----
-
-*Made with ❤️ and a lot of OpenCV debugging loll*
+prs are appreciated!
